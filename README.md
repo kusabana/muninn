@@ -7,7 +7,7 @@ python bsp viewer
 
 ## installation
 ```
-$ git clone --recurse-submodules https://github.com/ezekielathome/muginn
+$ git clone --recurse-submodules git@github.com/ezekielathome/muginn
 ```
 
 ## usage
