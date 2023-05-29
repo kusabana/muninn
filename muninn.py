@@ -97,6 +97,7 @@ print(
 pygame.init()
 display = (1600, 900)
 pygame.display.set_mode(display, pygame.DOUBLEBUF | pygame.OPENGL)
+pygame.display.set_caption(f"muninn - {bsp}")
 
 camera = Camera(display)
 
