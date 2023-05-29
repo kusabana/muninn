@@ -91,7 +91,7 @@ vertices, colors = zip(
 )
 
 print(
-    f". face triangulation done ({sum(len(poly) for poly in polygons)} -> {len(vertices)})"
+    f". face triangulation done ({sum(len(vert) for vert in polygons)} -> {len(vertices)})"
 )
 
 pygame.init()
@@ -115,25 +115,26 @@ while True:
     glPushMatrix()
     camera.update()
 
+    # push vertex vbo
     vertex_vbo.bind()
     glEnableClientState(GL_VERTEX_ARRAY)
     glVertexPointer(3, GL_FLOAT, 0, None)
 
-    # lines
+    # line overlay
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
     glColor3f(1.0, 1.0, 1.0)
     glDrawArrays(GL_TRIANGLES, 0, int(len(vertices) / 3))
 
+    # push color vbo
     color_vbo.bind()
     glEnableClientState(GL_COLOR_ARRAY)
     glColorPointer(3, GL_FLOAT, 0, None)
 
-    # tris
+    # triangles
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
     glDrawArrays(GL_TRIANGLES, 0, int(len(vertices) / 3))
 
     glDisableClientState(GL_VERTEX_ARRAY)
     glDisableClientState(GL_COLOR_ARRAY)
     glPopMatrix()
-
     pygame.display.flip()
