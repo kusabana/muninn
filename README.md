@@ -8,6 +8,7 @@ python bsp viewer
 ## installation
 ```
 $ git clone --recurse-submodules git@github.com/ezekielathome/muginn
+$ pip install -r requirements.txt
 ```
 
 ## usage
