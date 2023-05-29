@@ -119,9 +119,9 @@ while True:
     glVertexPointer(3, GL_FLOAT, 0, None)
 
     # lines
-    # glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
-    # glColor3f(1.0, 1.0, 1.0)
-    # glDrawArrays(GL_TRIANGLES, 0, int(len(vertices) / 3))
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
+    glColor3f(1.0, 1.0, 1.0)
+    glDrawArrays(GL_TRIANGLES, 0, int(len(vertices) / 3))
 
     color_vbo.bind()
     glEnableClientState(GL_COLOR_ARRAY)
