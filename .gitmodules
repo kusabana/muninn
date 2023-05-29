@@ -1,0 +1,3 @@
+[submodule "bsp_tool"]
+	path = bsp_tool
+	url = https://github.com/ezekielathome/bsp_tool
