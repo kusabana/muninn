@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import sys
 import os
 from OpenGL.GL import *
@@ -65,6 +66,9 @@ class Camera:
         glMultMatrixf(self.view)
         glGetFloatv(GL_MODELVIEW_MATRIX, self.view)
 
+
+if len(sys.argv) <= 1:
+    print("usage:\n\t./muninn.py <map.bsp>")
 
 map_file = sys.argv[1]
 bsp = bsp_tool.load_bsp(map_file)
