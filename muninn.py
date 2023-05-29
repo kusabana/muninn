@@ -61,8 +61,8 @@ class Camera:
         glLoadIdentity()
         glTranslatef(self.tx * 20, self.ty * 20, self.tz * 20)
         mouseMove = pygame.mouse.get_rel()
-        glRotatef(mouseMove[0] * 0.3, 0.0, 1.0, 0.0)
-        glRotatef(mouseMove[1] * 0.3, 1.0, 0.0, 0)
+        glRotatef(mouseMove[0] * 0.15, 0.0, 1.0, 0.0)
+        glRotatef(mouseMove[1] * 0.15, 1.0, 0.0, 0)
         glMultMatrixf(self.view)
         glGetFloatv(GL_MODELVIEW_MATRIX, self.view)
 
