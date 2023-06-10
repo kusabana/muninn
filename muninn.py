@@ -47,28 +47,46 @@ display = (1600, 900)
 pygame.display.set_mode(display, pygame.DOUBLEBUF | pygame.OPENGL)
 pygame.display.set_caption(f"muninn - {bsp}")
 
+entities = [
+    coord
+    for entity in bsp.ENTITIES
+    if "origin" in entity
+    for coord in list(map(float, entity["origin"].split(" ")))
+]
+
 spawns = [
     entity for entity in bsp.ENTITIES if entity["classname"].startswith("info_player_")
 ]
 spawn = tuple(map(float, spawns[0]["origin"].split(" ")))
+
 camera = Camera(display, spawn)
 
 # enable depth testing
 glEnable(GL_DEPTH_TEST)
 
+glEnable(GL_POINT_SMOOTH)
+glPointSize(5)
+
 # define buffers
 vertex_vbo = vbo.VBO(np.array(vertices, dtype="float32"))
 color_vbo = vbo.VBO(np.array(colors, dtype="float32"))
+entities_vbo = vbo.VBO(np.array(entities, dtype="float32"))
 
 while True:
     glPushMatrix()
     camera.update()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glEnableClientState(GL_VERTEX_ARRAY)
+
+    # draw entitites
+    entities_vbo.bind()
+    glVertexPointer(3, GL_FLOAT, 0, None)
+    glColor3f(1.0, 1.0, 1.0)
+    glDrawArrays(GL_POINTS, 0, int(len(entities) / 3))
 
     # push vertex vbo
     vertex_vbo.bind()
-    glEnableClientState(GL_VERTEX_ARRAY)
     glVertexPointer(3, GL_FLOAT, 0, None)
 
     # line overlay
