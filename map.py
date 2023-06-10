@@ -19,16 +19,21 @@ class Map:
     def vertices_of_face(self, face_index: int):
         face = self.bsp.FACES[face_index]
         first_edge = face.first_edge
-        positions = []
-        for surfedge in self.bsp.SURFEDGES[first_edge : (first_edge + face.num_edges)]:
-            if surfedge >= 0:
-                positions.append(self.bsp.VERTICES[self.bsp.EDGES[surfedge][0]])
-            else:
-                positions.append(self.bsp.VERTICES[self.bsp.EDGES[-surfedge][1]])
+        surfedges = self.bsp.SURFEDGES[first_edge : first_edge + face.num_edges]
+        edges = self.bsp.EDGES
+        vertices = self.bsp.VERTICES
+
+        positions = [
+            vertices[edges[surfedge][0]]
+            if surfedge >= 0
+            else vertices[edges[-surfedge][1]]
+            for surfedge in surfedges
+        ]
+
         texture_info = self.bsp.TEXTURE_INFO[face.texture_info]
         texture_data = self.bsp.TEXTURE_DATA[texture_info.texture_data]
-
         colour = [texture_data.reflectivity] * len(positions)
+
         return list(zip(positions, colour))
 
     def triangulate_faces(
