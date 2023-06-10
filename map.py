@@ -19,31 +19,12 @@ class Map:
     def vertices_of_face(self, face_index: int):
         face = self.bsp.FACES[face_index]
         first_edge = face.first_edge
-        edges = []
         positions = []
         for surfedge in self.bsp.SURFEDGES[first_edge : (first_edge + face.num_edges)]:
             if surfedge >= 0:
-                edge = self.bsp.EDGES[surfedge]
                 positions.append(self.bsp.VERTICES[self.bsp.EDGES[surfedge][0]])
             else:
-                edge = self.bsp.EDGES[-surfedge][::-1]
                 positions.append(self.bsp.VERTICES[self.bsp.EDGES[-surfedge][1]])
-            edges.append(edge)
-
-            # fix t-junctions
-            if {positions.count(P) for P in positions} != {1}:
-                repeats = [
-                    i for i, P in enumerate(positions) if positions.count(P) != 1
-                ]
-                if len(repeats) == 2:
-                    index_a, index_b = repeats
-                    if index_b - index_a == 2:
-                        positions.pop(index_a + 1)
-                        positions.pop(index_a + 1)
-                else:
-                    if repeats[1] == repeats[0] + 1 and repeats[1] == repeats[2] - 1:
-                        positions.pop(repeats[1])
-                        positions.pop(repeats[1])
         texture_info = self.bsp.TEXTURE_INFO[face.texture_info]
         texture_data = self.bsp.TEXTURE_DATA[texture_info.texture_data]
 
