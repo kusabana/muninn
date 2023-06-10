@@ -1,10 +1,9 @@
 import bsp_tool
-from bsp_tool.branches import vector
-import math
+from typing import List, Tuple
 
 
 class Map:
-    def __init__(self, file: str):
+    def __init__(self, file: str) -> None:
         self.bsp = bsp_tool.load_bsp(file)
         self.faces = [
             [
@@ -14,9 +13,9 @@ class Map:
             for x in range(len(self.bsp.FACES))
         ]
 
-    # we reconstruct the bsp_tool function as
-    # there are several flaws with it.
-    def vertices_of_face(self, face_index: int):
+    def vertices_of_face(
+        self, face_index: int
+    ) -> List[Tuple[Tuple[float, float, float], Tuple[float, float, float]]]:
         face = self.bsp.FACES[face_index]
         vertices = self.bsp.VERTICES
         edges = self.bsp.EDGES
@@ -39,7 +38,7 @@ class Map:
 
     def triangulate_faces(
         self,
-    ) -> list[tuple[float, float, float], tuple[float, float, float]]:
+    ) -> Tuple[List[Tuple[float, float, float]], List[Tuple[float, float, float]]]:
         return zip(
             *[
                 (vertex, color)
@@ -49,7 +48,7 @@ class Map:
             ]
         )
 
-    def triangulate_faces_flat(self) -> tuple[list[float], list[float]]:
+    def triangulate_faces_flat(self) -> Tuple[List[float], List[float]]:
         return zip(
             *[
                 (v, c)
@@ -58,23 +57,22 @@ class Map:
             ]
         )
 
-    def get_entities(self) -> list[tuple[float, float, float]]:
+    def get_entities(self) -> List[Tuple[float, float, float]]:
         return [
             self.convert_coord(entity["origin"])
             for entity in self.bsp.ENTITIES
             if "origin" in entity
         ]
 
-    def get_entities_flat(self) -> list[float]:
+    def get_entities_flat(self) -> List[float]:
         return [coord for entity in self.get_entities() for coord in entity]
 
-    def get_spawns(self) -> list[tuple[float, float, float]]:
+    def get_spawns(self) -> List[Tuple[float, float, float]]:
         return [
             self.convert_coord(entity["origin"])
             for entity in self.bsp.ENTITIES
             if entity["classname"].startswith("info_player_")
         ]
 
-    # converts "75 2 81" to tuple(75, 2, 81)
-    def convert_coord(self, str) -> tuple[float, float, float]:
-        return tuple(map(float, str.split(" ")))
+    def convert_coord(self, coord_str: str) -> Tuple[float, float, float]:
+        return tuple(map(float, coord_str.split(" ")))
