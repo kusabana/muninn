@@ -8,7 +8,7 @@ class Map:
         self.bsp = bsp_tool.load_bsp(file)
         self.faces = [
             [
-                ((vert[0].x, vert[0].y, vert[0].z), vert[2])
+                ((vert[0].x, vert[0].y, vert[0].z), vert[1])
                 for vert in self.vertices_of_face(x)
             ]
             for x in range(len(self.bsp.FACES))
@@ -28,9 +28,8 @@ class Map:
         texture_info = self.bsp.TEXTURE_INFO[face.texture_info]
         texture_data = self.bsp.TEXTURE_DATA[texture_info.texture_data]
 
-        normal = [self.bsp.PLANES[face.plane].normal] * len(positions)
         colour = [texture_data.reflectivity] * len(positions)
-        return list(zip(positions, normal, colour))
+        return list(zip(positions, colour))
 
     def triangulate_faces(
         self,
