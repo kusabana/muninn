@@ -18,10 +18,11 @@ class Map:
     # there are several flaws with it.
     def vertices_of_face(self, face_index: int):
         face = self.bsp.FACES[face_index]
-        first_edge = face.first_edge
-        surfedges = self.bsp.SURFEDGES[first_edge : first_edge + face.num_edges]
-        edges = self.bsp.EDGES
         vertices = self.bsp.VERTICES
+        edges = self.bsp.EDGES
+        surfedges = self.bsp.SURFEDGES[
+            face.first_edge : face.first_edge + face.num_edges
+        ]
 
         positions = [
             vertices[edges[surfedge][0]]
