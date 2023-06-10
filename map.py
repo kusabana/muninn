@@ -8,7 +8,7 @@ class Map:
         self.bsp = bsp_tool.load_bsp(file)
         self.faces = [
             [
-                ((vert[0].x, vert[0].y, vert[0].z), vert[4])
+                ((vert[0].x, vert[0].y, vert[0].z), vert[2])
                 for vert in self.vertices_of_face(x)
             ]
             for x in range(len(self.bsp.FACES))
@@ -18,7 +18,6 @@ class Map:
     # there are several flaws with it.
     def vertices_of_face(self, face_index: int):
         face = self.bsp.FACES[face_index]
-        uvs, uv2s = [], []
         first_edge = face.first_edge
         edges = []
         positions = []
@@ -47,33 +46,10 @@ class Map:
                         positions.pop(repeats[1])
         texture_info = self.bsp.TEXTURE_INFO[face.texture_info]
         texture_data = self.bsp.TEXTURE_DATA[texture_info.texture_data]
-        texture = texture_info.texture
-        lightmap = texture_info.lightmap
 
-        for P in positions:
-            uv = [
-                vector.dot(P, texture.s.vector) + texture.s.offset,
-                vector.dot(P, texture.t.vector) + texture.t.offset,
-            ]
-            uv[0] /= texture_data.view.width if texture_data.view.width != 0 else 1
-            uv[1] /= texture_data.view.height if texture_data.view.height != 0 else 1
-            uvs.append(vector.vec2(*uv))
-
-            uv2 = [
-                vector.dot(P, lightmap.s.vector) + lightmap.s.offset,
-                vector.dot(P, lightmap.t.vector) + lightmap.t.offset,
-            ]
-            if any([(face.lightmap.mins.x == 0), (face.lightmap.mins.y == 0)]):
-                uv2 = [0, 0]
-            else:
-                uv2[0] -= face.lightmap.mins.x
-                uv2[1] -= face.lightmap.mins.y
-                uv2[0] /= face.lightmap.size.x
-                uv2[1] /= face.lightmap.size.y
-            uv2s.append(uv2)
         normal = [self.bsp.PLANES[face.plane].normal] * len(positions)
         colour = [texture_data.reflectivity] * len(positions)
-        return list(zip(positions, normal, uvs, uv2s, colour))
+        return list(zip(positions, normal, colour))
 
     def triangulate_faces(
         self,
