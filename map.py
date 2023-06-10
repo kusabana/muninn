@@ -28,11 +28,10 @@ class Map:
         )
 
     def triangulate_faces_flat(self) -> tuple[list[float], list[float]]:
-        vertices, colors = self.triangulate_faces()
         return zip(
             *[
                 (v, c)
-                for vertex, color in zip(vertices, colors)
+                for vertex, color in zip(*self.triangulate_faces())
                 for v, c in zip(vertex, color)
             ]
         )
