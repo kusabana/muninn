@@ -34,7 +34,8 @@ pygame.display.set_caption(f"muninn - {mp.bsp}")
 entities = mp.get_entities_flat()
 spawn = mp.get_spawns()[0]
 
-camera = Camera(display, spawn)
+# add a bit of height to spawn
+camera = Camera(display, (spawn[0], spawn[1], spawn[2] + 64))
 
 # enable depth testing
 glEnable(GL_DEPTH_TEST)
