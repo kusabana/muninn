@@ -35,7 +35,8 @@ entities = mp.get_entities_flat()
 spawn = mp.get_spawns()[0]
 
 # add a bit of height to spawn
-camera = Camera(display, (spawn[0], spawn[1], spawn[2] + 64))
+spawn = (spawn[0], spawn[1], spawn[2] + 64)
+camera = Camera(display, spawn)
 
 # enable depth testing
 glEnable(GL_DEPTH_TEST)
