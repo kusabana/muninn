@@ -36,13 +36,13 @@ class Camera:
 
         keys = pygame.key.get_pressed()
         mouse = pygame.mouse.get_rel()
-        pygame.mouse.set_pos(500, 500) # TODO: set to display center
+        pygame.mouse.set_pos(500, 500)  # TODO: set to display center
 
         move_vectors = {
             K_w: [
                 self.move_speed * sin(radians(self.rotation[1])),
                 self.move_speed * cos(radians(self.rotation[1])),
-                -self.move_speed * cos(radians(self.rotation[0]))
+                -self.move_speed * cos(radians(self.rotation[0])),
             ],
             K_s: [
                 -self.move_speed * sin(radians(self.rotation[1])),
