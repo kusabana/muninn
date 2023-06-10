@@ -21,7 +21,7 @@ class Camera:
 
         # setup perspective
         glMatrixMode(GL_PROJECTION)
-        gluPerspective(45, (display[0] / display[1]), 1.5, 15000.0)
+        gluPerspective(45, (display[0] / display[1]), 10.0, 10000.0)
         glMatrixMode(GL_MODELVIEW)
 
     def update(self):
