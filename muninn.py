@@ -5,59 +5,34 @@ from OpenGL.GL import *
 from OpenGL.arrays import vbo
 import numpy as np
 
-try:  # local copy, temporary until author fixes their library...
-    import bsp_tool.bsp_tool as bsp_tool
-except:
-    import bsp_tool
 
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 from pygame.locals import *
+
 from camera import Camera
+from map import Map
 
 if len(sys.argv) <= 1:
     print("usage:\n\t./muninn.py <map.bsp>")
 
-map_file = sys.argv[1]
-bsp = bsp_tool.load_bsp(map_file)
-
-print(f". loaded {bsp}")
+mp = Map(sys.argv[1])
+print(f". loaded {mp.bsp}")
 print(". performing face triangulation...")
-faces = [
-    [((vert[0].x, vert[0].y, vert[0].z), vert[4]) for vert in bsp.vertices_of_face(x)]
-    for x in range(len(bsp.FACES))
-]
-vertices, colors = zip(
-    *[
-        (v, c)
-        for face in faces
-        for tri in [(face[0], b, c) for b, c in zip(face[1:], face[2:])]
-        for vertex, color in tri
-        for v, c in zip(vertex, color)
-    ]
-)
+vertices, colors = mp.triangulate_faces_flat()
 
 print(
-    f". face triangulation done ({sum(len(vert) for vert in faces)} -> {len(vertices)})"
+    f". face triangulation done ({sum(len(vert) for vert in mp.faces)} -> {len(vertices)})"
 )
 
 # initialize pygame
 pygame.init()
 display = (1600, 900)
 pygame.display.set_mode(display, pygame.DOUBLEBUF | pygame.OPENGL)
-pygame.display.set_caption(f"muninn - {bsp}")
+pygame.display.set_caption(f"muninn - {mp.bsp}")
 
-entities = [
-    coord
-    for entity in bsp.ENTITIES
-    if "origin" in entity
-    for coord in list(map(float, entity["origin"].split(" ")))
-]
-
-spawns = [
-    entity for entity in bsp.ENTITIES if entity["classname"].startswith("info_player_")
-]
-spawn = tuple(map(float, spawns[0]["origin"].split(" ")))
+entities = mp.get_entities_flat()
+spawn = mp.get_spawns()[0]
 
 camera = Camera(display, spawn)
 
