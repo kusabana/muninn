@@ -41,6 +41,7 @@ camera = Camera(display, spawn)
 # enable depth testing
 glEnable(GL_DEPTH_TEST)
 
+# set settings for entity markers
 glEnable(GL_POINT_SMOOTH)
 glPointSize(5)
 
