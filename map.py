@@ -30,11 +30,14 @@ class Map:
             for surfedge in surfedges
         ]
 
+        colour = [self.get_face_reflectivity(face_index)] * len(positions)
+        return list(zip(positions, colour))
+
+    def get_face_reflectivity(self, face_index: int) -> List[float]:
+        face = self.bsp.FACES[face_index]
         texture_info = self.bsp.TEXTURE_INFO[face.texture_info]
         texture_data = self.bsp.TEXTURE_DATA[texture_info.texture_data]
-        colour = [texture_data.reflectivity] * len(positions)
-
-        return list(zip(positions, colour))
+        return texture_data.reflectivity
 
     def triangulate_faces(
         self,
