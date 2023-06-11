@@ -16,8 +16,8 @@ class Camera:
     def __init__(self, display, origin):
         self.position = list(origin)
         self.rotation = [-90, 180]
-        self.move_speed = 3.5
-        self.rotate_speed = 0.35
+        self.move_speed = 1.5
+        self.rotate_speed = 0.15
 
         # setup perspective
         glMatrixMode(GL_PROJECTION)
@@ -67,8 +67,8 @@ class Camera:
             if keys[key]:
                 self.position = [sum(x) for x in zip(self.position, vector)]
 
-        self.rotation[0] += mouse[1] * self.rotate_speed
-        self.rotation[1] += mouse[0] * self.rotate_speed
+        self.rotation[0] -= mouse[1] * self.rotate_speed
+        self.rotation[1] -= mouse[0] * self.rotate_speed
 
         glLoadIdentity()
         glRotatef(self.rotation[0], 1, 0, 0)
