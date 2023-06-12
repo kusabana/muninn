@@ -21,7 +21,7 @@ class Camera:
 
         # setup perspective
         glMatrixMode(GL_PROJECTION)
-        gluPerspective(45, (display[0] / display[1]), 10.0, 10000.0)
+        gluPerspective(45, (display[0] / display[1]), 10.0, 65000.0)
         glMatrixMode(GL_MODELVIEW)
 
     def update(self):
@@ -35,8 +35,8 @@ class Camera:
                     quit()
 
         keys = pygame.key.get_pressed()
+        pygame.mouse.set_pos(250, 250)
         mouse = pygame.mouse.get_rel()
-        pygame.mouse.set_pos(500, 500)  # TODO: set to display center
 
         move_vectors = {
             K_w: [
@@ -67,8 +67,8 @@ class Camera:
             if keys[key]:
                 self.position = [sum(x) for x in zip(self.position, vector)]
 
-        self.rotation[0] -= mouse[1] * self.rotate_speed
-        self.rotation[1] -= mouse[0] * self.rotate_speed
+        self.rotation[0] += mouse[1] * self.rotate_speed
+        self.rotation[1] += mouse[0] * self.rotate_speed
 
         glLoadIdentity()
         glRotatef(self.rotation[0], 1, 0, 0)

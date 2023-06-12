@@ -30,6 +30,8 @@ pygame.init()
 display = (1600, 900)
 pygame.display.set_mode(display, pygame.DOUBLEBUF | pygame.OPENGL)
 pygame.display.set_caption(f"muninn - {mp.bsp}")
+pygame.event.set_grab(True)
+pygame.mouse.set_visible(False)
 
 entities = mp.get_entities_flat()
 spawn = mp.get_spawns()[0]
