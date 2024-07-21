@@ -7,7 +7,7 @@ source engine bsp viewer
 
 ## installation
 ```
-$ git clone --recurse-submodules git@github.com/kusabana/muninn
+$ git clone git@github.com/kusabana/muninn
 $ pip install -r requirements.txt
 ```
 
