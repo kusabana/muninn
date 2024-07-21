@@ -24,9 +24,11 @@ class Map:
         ]
 
         positions = [
-            vertices[edges[surfedge][0]]
-            if surfedge >= 0
-            else vertices[edges[-surfedge][1]]
+            (
+                vertices[edges[surfedge][0]]
+                if surfedge >= 0
+                else vertices[edges[-surfedge][1]]
+            )
             for surfedge in surfedges
         ]
 
