@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import sys
 import os
+import argparse
 from OpenGL.GL import *
 from OpenGL.arrays import vbo
 import numpy as np
@@ -13,10 +14,20 @@ from pygame.locals import *
 from camera import Camera
 from map import Map
 
-if len(sys.argv) <= 1:
-    print("usage:\n\t./muninn.py <map.bsp>")
+parser = argparse.ArgumentParser(description="muninn - Source Engine BSP Viewer")
+parser.add_argument("map", help="path to the .bsp file")
+args = parser.parse_args()
 
-mp = Map(sys.argv[1])
+if not os.path.isfile(args.map):
+    print(f"error: file not found: {args.map}", file=sys.stderr)
+    sys.exit(1)
+
+try:
+    mp = Map(args.map)
+except Exception as e:
+    print(f"error: failed to load BSP '{args.map}': {e}", file=sys.stderr)
+    sys.exit(1)
+
 print(f". loaded {mp.bsp}")
 print(". performing face triangulation...")
 vertices, colors = mp.triangulate_faces_flat()
