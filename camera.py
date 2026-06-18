@@ -1,75 +1,46 @@
-from pygame.locals import *
-from OpenGL.GL import (
-    glMatrixMode,
-    glLoadIdentity,
-    glRotatef,
-    glTranslatef,
-    GL_PROJECTION,
-    GL_MODELVIEW,
-)
-from OpenGL.GLU import gluPerspective
 from math import sin, cos, radians
-import pygame
+
+from OpenGL.GL import glLoadIdentity, glRotatef, glTranslatef
+from pygame.locals import K_w, K_s, K_a, K_d, K_SPACE, K_LCTRL
 
 
 class Camera:
-    def __init__(self, display, origin):
+    def __init__(self, origin, move_speed=90.0, rotate_speed=0.15):
         self.position = list(origin)
-        self.rotation = [-90, 180]
-        self.move_speed = 1.5
-        self.rotate_speed = 0.15
+        self.rotation = [-90.0, 180.0]
+        self.move_speed = move_speed
+        self.rotate_speed = rotate_speed
 
-        # setup perspective
-        glMatrixMode(GL_PROJECTION)
-        gluPerspective(45, (display[0] / display[1]), 10.0, 65000.0)
-        glMatrixMode(GL_MODELVIEW)
-
-    def update(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    quit()
-
-        keys = pygame.key.get_pressed()
-        pygame.mouse.set_pos(250, 250)
-        mouse = pygame.mouse.get_rel()
+    def update(self, state, dt):
+        step = self.move_speed * dt
+        pitch = radians(self.rotation[0])
+        yaw = radians(self.rotation[1])
 
         move_vectors = {
             K_w: [
-                self.move_speed * sin(radians(self.rotation[1])) * sin(radians(self.rotation[0])),
-                self.move_speed * cos(radians(self.rotation[1])) * sin(radians(self.rotation[0])),
-                -self.move_speed * cos(radians(self.rotation[0])),
+                -step * sin(yaw) * sin(pitch),
+                -step * cos(yaw) * sin(pitch),
+                -step * cos(pitch),
             ],
             K_s: [
-                -self.move_speed * sin(radians(self.rotation[1])) * sin(radians(self.rotation[0])),
-                -self.move_speed * cos(radians(self.rotation[1])) * sin(radians(self.rotation[0])),
-                self.move_speed * cos(radians(self.rotation[0])),
+                step * sin(yaw) * sin(pitch),
+                step * cos(yaw) * sin(pitch),
+                step * cos(pitch),
             ],
-            K_a: [
-                -self.move_speed * cos(radians(self.rotation[1])),
-                self.move_speed * sin(radians(self.rotation[1])),
-                0,
-            ],
-            K_d: [
-                self.move_speed * cos(radians(self.rotation[1])),
-                -self.move_speed * sin(radians(self.rotation[1])),
-                0,
-            ],
-            K_SPACE: [0, 0, self.move_speed],
-            K_LCTRL: [0, 0, -self.move_speed],
+            K_a: [-step * cos(yaw), step * sin(yaw), 0],
+            K_d: [step * cos(yaw), -step * sin(yaw), 0],
+            K_SPACE: [0, 0, step],
+            K_LCTRL: [0, 0, -step],
         }
 
         for key, vector in move_vectors.items():
-            if keys[key]:
-                self.position = [sum(x) for x in zip(self.position, vector)]
+            if state.keys[key]:
+                self.position = [sum(c) for c in zip(self.position, vector)]
 
-        self.rotation[0] += mouse[1] * self.rotate_speed
-        self.rotation[1] += mouse[0] * self.rotate_speed
+        self.rotation[0] += state.mouse_delta[1] * self.rotate_speed
+        self.rotation[1] += state.mouse_delta[0] * self.rotate_speed
 
+    def apply(self):
         glLoadIdentity()
         glRotatef(self.rotation[0], 1, 0, 0)
         glRotatef(self.rotation[1], 0, 0, 1)

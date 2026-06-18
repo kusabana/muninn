@@ -13,5 +13,5 @@ $ pip install -r requirements.txt
 
 ## usage
 ```
-$ ./muninn.py de_dust2.bsp 
+$ ./main.py de_dust2.bsp 
 ```
