@@ -72,12 +72,5 @@ class Map:
     def get_entities_flat(self) -> List[float]:
         return [coord for entity in self.get_entities() for coord in entity]
 
-    def get_spawns(self) -> List[Tuple[float, float, float]]:
-        return [
-            self.convert_coord(entity["origin"])
-            for entity in self.bsp.ENTITIES
-            if entity["classname"].startswith("info_player_")
-        ]
-
     def convert_coord(self, coord_str: str) -> Tuple[float, float, float]:
         return tuple(map(float, coord_str.split(" ")))

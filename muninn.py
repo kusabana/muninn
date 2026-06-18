@@ -34,11 +34,7 @@ pygame.event.set_grab(True)
 pygame.mouse.set_visible(False)
 
 entities = mp.get_entities_flat()
-spawn = mp.get_spawns()[0]
-
-# add a bit of height to spawn
-spawn = (spawn[0], spawn[1], spawn[2] + 64)
-camera = Camera(display, spawn)
+camera = Camera(display, (0.0, 0.0, 0.0))
 
 # enable depth testing
 glEnable(GL_DEPTH_TEST)
