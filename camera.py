@@ -40,13 +40,13 @@ class Camera:
 
         move_vectors = {
             K_w: [
-                self.move_speed * sin(radians(self.rotation[1])),
-                self.move_speed * cos(radians(self.rotation[1])),
+                self.move_speed * sin(radians(self.rotation[1])) * sin(radians(self.rotation[0])),
+                self.move_speed * cos(radians(self.rotation[1])) * sin(radians(self.rotation[0])),
                 -self.move_speed * cos(radians(self.rotation[0])),
             ],
             K_s: [
-                -self.move_speed * sin(radians(self.rotation[1])),
-                -self.move_speed * cos(radians(self.rotation[1])),
+                -self.move_speed * sin(radians(self.rotation[1])) * sin(radians(self.rotation[0])),
+                -self.move_speed * cos(radians(self.rotation[1])) * sin(radians(self.rotation[0])),
                 self.move_speed * cos(radians(self.rotation[0])),
             ],
             K_a: [
