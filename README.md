@@ -2,7 +2,7 @@
   <h3><a href="https://github.com/kusabana">
     ~kusabana/</a>muninn
   </h3>
-source engine bsp viewer
+Source Engine BSP Viewer
 </div>
 
 ## installation
